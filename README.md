@@ -10,8 +10,30 @@ Background, Objective, Method, Result and Conclusion must be included. For studi
 
 All posters will be reviewed by the Review Committee who will assess each poster based on its adherence to format, scientific merit and alignment with the overall symposium themes, prior to the event. Your poster must be emailed to grhresearch@ahs.ca (in .pdf format) by no later than Wednesday, October 12, 2016 @ 4:00 pm.
 
-## Poster
+## Poster Abstract
 
 ### Title
 
 Redliner: An Activity Monitor for Manual Wheelchair Users
+
+### Background
+
+Activity monitors such as those produced by FitBit and Garmin are popular amongst the general population, however despite their usefulness in healthy living they are unsuitable for wheelchair users as they do not measure wheelchair propulsion. While the SmartWheel is an existing wheelchair activity monitor, it is prohibitively expensive and intrusive for personal use.
+
+### Objective
+
+The objective of this work was to create a low-cost manual wheelchair activity monitor capable of measuring parameters relating to activity level while also monitoring and notifying the user of damaging over-exertion events, fulfilling the role of personal activity monitor for wheelchair users.
+
+### Method
+
+The Redliner device uses a novel non-intrusive sensor which attaches to a user's wheel and measures the wheelchair's motion. A wheelchair-specific propulsion algorithm was developed which counts pushes, estimates distance travelled and time spent active, and enumerates overexertion events in real-time onboard the device.
+
+In order to evaluate the effectiveness of the Redliner device, a series of trials collecting a minimum of 3 pushes on various surfaces including linoleum, grass, gravel, and rough pavement were performed while collecting synchronous SmartWheel data. These surfaces were chosen to represent real-world wheelchair propulsion situations which could prove difficult for the device.
+
+### Result
+
+Kinematic data produced by the Redliner device was found to be in good agreement with the SmartWheel, with only slight losses in accuracy on extremely rough surfaces. Parameters reported by the propulsion algorithm closely matched experimental conditions.
+
+### Conclusion
+
+Redliner is a novel device for wheelchair users which has been proven effective for activity and over-exertion monitoring.

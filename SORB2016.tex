@@ -4,6 +4,7 @@
 
 \usepackage{multicol} % This is so we can have multiple columns of text side-by-side
 \columnsep=100pt % This is the amount of white space between the columns in the poster
+\columnseprule=1pt
 
 \usepackage{tikz}
 
@@ -20,6 +21,18 @@
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
+
+\usepackage{caption}
+\captionsetup{margin=2cm,font=large,labelfont=bf}
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+
+%\usepackage{pgfplots}
+%\usepackage{pgfplotstable}
+%\pgfplotsset{compat=newest}
+%\usepgfplotslibrary{external}
+%\tikzexternalize
 
 \begin{document}
 
@@ -43,10 +56,6 @@
 
 \begin{multicols*}{3}
 \large
-
-%\begin{abstract}
-%Activity monitors such as those produced by FitBit and Garmin are popular amongst the general population, however despite their usefulness in healthy living they are unsuitable for wheelchair users as they do not measure wheelchair propulsion. While the SmartWheel is an existing wheelchair activity monitor, it is prohibitively expensive and intrusive for personal use. The objective of this work was to create a low-cost manual wheelchair activity monitor capable of measuring parameters relating to activity level while also monitoring and notifying the user of damaging over-exertion events, fulfilling the role of personal activity monitor for wheelchair users. The Redliner device uses a novel non-intrusive sensor which attaches to a user's wheel and measures the wheelchair's motion. A wheelchair-specific propulsion algorithm was developed which counts pushes, estimates distance travelled and time spent active, and enumerates overexertion events in real-time onboard the device. In order to evaluate the effectiveness of the Redliner device, a series of trials collecting a minimum of 3 pushes on various surfaces including linoleum, grass, gravel, and rough pavement were performed while collecting synchronous SmartWheel data. These surfaces were chosen to represent real-world wheelchair propulsion situations which could prove difficult for the device. Kinematic data produced by the Redliner device was found to be in good agreement with the SmartWheel, with only slight losses in accuracy on extremely rough surfaces. Parameters reported by the propulsion algorithm closely matched experimental conditions. Redliner is a novel device for wheelchair users which has been proven effective for activity and over-exertion monitoring.
-%\end{abstract}
 
 \section*{Background}
 \begin{itemize}
@@ -77,7 +86,15 @@ The objective of this work was to create an inexpensive activity monitor for man
 
 \section*{Method}
 
-\section*{Result}
+\section*{Results}
+As you can see in Figure \ref{fig:10pushgravel}, derp.
+
+\begin{Figure}
+    \centering
+    \includegraphics[width=\linewidth]{data/assets/test.pdf}
+    \captionof{figure}{Velocity and acceleration traces for both Redliner and SmartWheel for 10 pushes on rough gravel. The traces are in close enough agreement to accurately count pushes and reasonably estimate exertion and distance travelled with Redliner---despite the excess noise caused by the rough terrain.}
+    \label{fig:10pushgravel}
+\end{Figure}
 
 \section*{Conclusions}
 \begin{itemize}
