@@ -28,11 +28,15 @@
   {\par\medskip\noindent\minipage{\linewidth}}
   {\endminipage\par\medskip}
 
-%\usepackage{pgfplots}
-%\usepackage{pgfplotstable}
-%\pgfplotsset{compat=newest}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=newest}
 %\usepgfplotslibrary{external}
 %\tikzexternalize
+
+\definecolor{tableau_blue}{RGB}{31, 119, 180}
+\definecolor{tableau_red}{RGB}{214, 39, 40}
+\definecolor{tableau_green}{RGB}{44, 160, 44}
 
 \begin{document}
 
@@ -65,14 +69,15 @@
             \item Propulsion forces over 80\% of maximum capacity result in damage \cite{small}
         \end{itemize}
     \item Typical existing activity monitors don't work with manual wheelchair users
-    \item SmartWheels are the gold standard, but are an expensive clinical tool
+    \item SmartWheels are the gold standard, but are a very expensive clinical tool
         \begin{itemize}
+            \item SmartWheels require modifying a user's chair (replacing the wheels)
             \item There is a need for an affordable consumer-grade tool for activity monitoring
         \end{itemize}
 \end{itemize}
 
 \section*{Objective}
-The objective of this work was to create an inexpensive activity monitor for manual wheelchair users capable of measuring the following data:
+The objective of this work was to create an inexpensive activity monitor for manual wheelchair users capable of measuring the following data without modifying the user's chair:
 
 \begin{itemize}
     \item Number of propulsion strokes
@@ -86,14 +91,63 @@ The objective of this work was to create an inexpensive activity monitor for man
 
 \section*{Method}
 
+\begin{itemize}
+    \item Redliner uses a novel non-intrusive sensor which attaches to the side of a user's wheel
+\end{itemize}
+
 \section*{Results}
-As you can see in Figure \ref{fig:10pushgravel}, derp.
+As you can see in Figure \ref{fig:10pushgravelv}, derp.
 
 \begin{Figure}
     \centering
-    \includegraphics[width=\linewidth]{data/assets/test.pdf}
-    \captionof{figure}{Velocity and acceleration traces for both Redliner and SmartWheel for 10 pushes on rough gravel. The traces are in close enough agreement to accurately count pushes and reasonably estimate exertion and distance travelled with Redliner---despite the excess noise caused by the rough terrain.}
-    \label{fig:10pushgravel}
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.8\linewidth,height=0.3\linewidth,
+            xmin=0, xmax=26, ymin=-0.25, ymax=1.75,
+            xtick={0,2,...,26}, ytick={0,0.4,...,1.6}, grid=both,
+            axis lines=left,
+            xlabel={Time, $t$ (s)}, ylabel={Velocity, $v$, $\frac{\mathrm{m}}{\mathrm{s}}$}]
+            \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_swv.dat}; \addlegendentry{\small\ SmartWheel}
+            \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_rlv.dat}; \addlegendentry{\small\ Redliner}
+        \end{axis}
+    \end{tikzpicture}
+    \captionof{figure}{Velocity traces for both SmartWheel and Redliner for 10 pushes on rough gravel. Despite the rough terrain, the traces are in close agreement---allowing Redliner to reasonably estimate the velocity and distance travelled by the wheelchair.}
+    \label{fig:10pushgravelv}
+\end{Figure}
+
+\begin{Figure}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.8\linewidth,height=0.3\linewidth,
+            xmin=0, xmax=26, ymin=-1.5, ymax=2.0,
+            xtick={0,2,...,26}, ytick={-1.5,-1.0,...,2.0}, grid=both,
+            axis lines=left,
+            xlabel={Time, $t$ (s)}, ylabel={Acceleration, $a$, $\frac{\mathrm{m}}{\mathrm{s}^2}$}]
+            \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_swa.dat}; \addlegendentry{\small\ SmartWheel}
+            \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_rla.dat}; \addlegendentry{\small\ Redliner}
+        \end{axis}
+    \end{tikzpicture}
+    \captionof{figure}{Acceleration traces for both SmartWheel and Redliner for 10 pushes on rough gravel. The traces are in close agreement, allowing Redliner to accurately detect overexertion events.}
+    \label{fig:10pushgravela}
+\end{Figure}
+
+\begin{Figure}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.8\linewidth,height=0.3\linewidth,
+            xmin=0, xmax=26, ymin=-1.5, ymax=2.0,
+            xtick={0,2,...,26}, ytick={-1.5,-1.0,...,2.0}, grid=both,
+            axis lines=left,
+            xlabel={Time, $t$ (s)}, ylabel={Acceleration, $a$, $\frac{\mathrm{m}}{\mathrm{s}^2}$}]
+            \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_rla.dat}; \addlegendentry{\small\ Acceleration}
+            \addplot +[mark=noindent, line width=4pt, tableau_green] table{data/assets/gravel_10_pushes.dat}; \addlegendentry{\small\ Detected Pushes}
+            \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_redline.dat}; \addlegendentry{\small\ Redline Events}
+        \end{axis}
+    \end{tikzpicture}
+    \captionof{figure}{Acceleration, detected pushes, and redlines of 10 pushes on gravel as measured by Redliner. An algorithm was developed to detect pushes from this acceleration data while also monitoring redlining events.}
+    \label{fig:10pushgravel_pushes}
 \end{Figure}
 
 \section*{Conclusions}
