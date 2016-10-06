@@ -16,7 +16,7 @@
 \usepackage[T1]{fontenc}
 
 \usepackage{graphicx} % Required for including images
-\graphicspath{{figures/}} % Location of the graphics files
+\usepackage{subfig}
 \usepackage{booktabs} % Top and bottom rules for table
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
@@ -65,11 +65,11 @@
 \begin{itemize}
     \item Wheelchair users have a strong need to monitor activity
         \begin{itemize}
-            \item Manual wheelchair users are highly susceptible to repetitive stress injuries \cite{big}
-            \item Propulsion forces over 80\% of maximum capacity result in damage \cite{small}
+            \item Manual wheelchair users are highly susceptible to repetitive stress injuries %\cite{big}
+            \item Propulsion forces over 80\% of maximum capacity result in damage %\cite{small}
         \end{itemize}
     \item Typical existing activity monitors don't work with manual wheelchair users
-    \item SmartWheels are the gold standard, but are a very expensive clinical tool
+    \item SmartWheels are the gold standard, but are a very expensive clinical tool \cite{asato93}
         \begin{itemize}
             \item SmartWheels require modifying a user's chair (replacing the wheels)
             \item There is a need for an affordable consumer-grade tool for activity monitoring
@@ -96,6 +96,23 @@ The objective of this work was to create an inexpensive activity monitor for man
 \end{itemize}
 
 \section*{Results}
+\noindent
+\begin{minipage}{\columnwidth}
+\makeatletter
+\newcommand{\@captype}{figure}
+\makeatother
+\centering
+\subfloat[Original Redliner prototype, assembled using breakout boards]{%
+  \includegraphics[width=0.4\linewidth]{photos/redliner_alpha.png}%
+  \label{fig:redliner_photo:alpha}%
+}\qquad%
+\subfloat[Average price]{%
+  \includegraphics[width=0.4\linewidth]{photos/redliner_beta.png}%
+  \label{fig:redliner_photo:beta}%
+}
+\caption{Simulation results}
+\end{minipage}
+
 As you can see in Figure \ref{fig:10pushgravelv}, derp.
 
 \begin{Figure}
