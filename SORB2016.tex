@@ -22,18 +22,20 @@
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
 
-\usepackage{caption}
-\captionsetup{margin=0pt,font=large,labelfont=bf}
+\usepackage[hypcap=false]{caption}
+\captionsetup{margin=0.5cm,font=large,labelfont=bf}
+\captionsetup[subfloat]{margin=0.5cm,font=large,labelfont=bf}
+
 \newenvironment{Figure}
   {\par\medskip\noindent\minipage{\linewidth}}
   {\endminipage\par\medskip}
+
+\usepackage[hidelinks]{hyperref}
 
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \pgfplotsset{compat=newest}
 \usepgfplotslibrary{groupplots}
-%\usepgfplotslibrary{external}
-%\tikzexternalize
 
 \definecolor{tableau_blue}{RGB}{31, 119, 180}
 \definecolor{tableau_red}{RGB}{214, 39, 40}
@@ -53,8 +55,9 @@
 \vspace{0.75cm}
 \color{white}
 \veryHuge \textbf{\textsc{Redliner: An Activity Monitor for Manual Wheelchair Users}}\\[1cm]
-\huge {Kenton Hamaluik, MSc, EIT\textsuperscript{1}, Zohreh Salimi, MSc\textsuperscript{1}, Martin Ferguson-Pell, PhD, C.Phys.\textsuperscript{1,2}}\\
-\large \textsuperscript{1}Faculty of Rehabilitation Medicine,\ \textsuperscript{2}Peter Lougheed Leadership College\\
+\huge {Kenton Hamaluik, MSc, EIT\textsuperscript{1}, Zohreh Salimi, MSc\textsuperscript{2}, Martin Ferguson-Pell, PhD, C.Phys.\textsuperscript{3}}\\
+\large \textsuperscript{1}\href{mailto:hamaluik@ualberta.ca}{hamaluik@ualberta.ca}, \textsuperscript{2}\href{mailto:zsalimi@ualberta.ca}{zsalimi@ualberta.ca}, \textsuperscript{3}\href{mailto:martin.ferguson-pell@ualberta.ca}{martin.ferguson-pell@ualberta.ca}\\
+%\large \textsuperscript{1}Faculty of Rehabilitation Medicine, University of Alberta;\ \textsuperscript{2}Peter Lougheed Leadership College\\
 \end{minipage}
 
 \vspace{4cm}
@@ -63,58 +66,72 @@
 \large
 
 \section*{Background}
-\begin{itemize}
-    \item Wheelchair users have a need to monitor daily activity
-        \begin{itemize}
-            \item Manual wheelchair users are highly susceptible to repetitive stress injuries \cite{mercer06}
-            \item Propulsion forces over 80\% of maximum capacity often result in injuries %\cite{small}
-        \end{itemize}
-    \item Typical existing activity monitors don't work with manual wheelchair users
-    \item SmartWheels (as shown in Figure \ref{fig:smartwheel}) are the gold standard, but are a very expensive clinical tool \cite{asato93,cowan08}
-        \begin{itemize}
-            \item SmartWheels require modifying a user's chair (replacing the wheels)
-            \item There is a need for an affordable consumer-grade tool for activity monitoring
-        \end{itemize}
-\end{itemize}
-
-\begin{Figure}
-    \centering
-    \includegraphics[width=0.5\columnwidth]{photos/smartwheel.png}
-    \captionof{figure}{SmartWheels are accurate clinical tools for measuring wheelchair performance. Unfortunately their cost and the requirement to modify the user's wheelchair make them ill-suited for daily activity monitoring.}
-    \label{fig:smartwheel}
-\end{Figure}
+\begin{minipage}[t]{0.5\columnwidth}
+    \begin{itemize}
+        \item Wheelchair users have a need for daily activity monitoring
+            \begin{itemize}
+                \item Manual wheelchair users are highly susceptible to repetitive stress injuries \cite{mercer06}
+                \item Propulsion forces over 80\% of maximum capacity often result in injuries \cite{hills11}
+            \end{itemize}
+        \item Typical existing activity monitors (Fitbit\textsuperscript{\textregistered}, etc) \textbf{don't work} with manual wheelchair users
+        \item SmartWheels are the gold standard \cite{asato93,cowan08}
+            \begin{itemize}
+                \item Prohibitively expensive for consumers
+                \item Require chair modification (replacing the wheels)
+            \end{itemize}
+    \end{itemize}
+\end{minipage}
+\hspace{0.05\columnwidth}%
+\begin{minipage}[t]{0.45\columnwidth}
+    \begin{Figure}
+        \centering
+        \includegraphics[width=\linewidth]{photos/smartwheel.png}
+        \captionof{figure}{A SmartWheel instrumented wheelchair wheel.}
+        \label{fig:smartwheel}
+    \end{Figure}
+\end{minipage}
 
 \section*{Objective}
-The objective of this work was to create an inexpensive activity monitor for manual wheelchair users capable of measuring the following data without modifying the user's chair:
-
 \begin{itemize}
-    \item Number of propulsion strokes
-    \item Average travel velocity
-    \item Amount of time spent active
-    \item Estimated distance travelled
-    \item Number of ``redline events''\textsuperscript{1}
+    \item Create an \textbf{inexpensive} activity monitor for \textbf{manual wheelchair users} which continuously monitors the following:
+    \begin{itemize}
+        \item Number of propulsion strokes
+        \item Average travel velocity
+        \item Amount of time spent active
+        \item Estimated distance travelled
+        \item Number of ``redline events''\textsuperscript{1}
+    \end{itemize}
 \end{itemize}
-
 \textsuperscript{1} \textit{redline events} are instances of when the user's propulsion force exceeds 80\% of the maximal propulsion force they can generate, thus indicating potential for injury
 
 \section*{Method}
-
-\begin{itemize}
-    \item Redliner uses a novel unintrusive sensor design which attaches to the side of a user's regular wheel
-    \item A simple prototype was created to perform the measurements for analysis, see Figure \ref{fig:redliner:alpha}
-    \item The system 
-\end{itemize}
-
-\begin{Figure}
-    \centering
-    \includegraphics[width=0.5\columnwidth]{photos/redliner_alpha.png}
-    \captionof{figure}{Original Redliner prototype, assembled using breakout boards}
-    \label{fig:redliner:alpha}
-\end{Figure}
+\begin{minipage}[t]{0.45\columnwidth}
+     \begin{Figure}
+        \centering
+        \includegraphics[width=0.75\linewidth]{photos/redliner_alpha.png}
+        \captionof{figure}{Original Redliner prototype, assembled using breakout boards}
+        \label{fig:redliner:alpha}
+    \end{Figure}
+\end{minipage}
+\hspace{0.05\columnwidth}%
+\begin{minipage}[t]{0.5\columnwidth}
+    \begin{itemize}
+        \item Utilize Newton's laws of motion to estimate propulsion force using kinematic data
+        \item Create a simple prototype to perform the measurements for analysis
+        \item Collect and compare synchronous propulsion data between SmartWheel and Redliner across varied terrain:
+        \begin{itemize}
+            \item Linoleum
+            \item Grass
+            \item Gravel
+            \item Pavement
+        \end{itemize}
+    \end{itemize}
+\end{minipage}
 
 \section*{Results}
-
-As you can see in Figure \ref{fig:10pushgravelv}, derp.
+\begin{itemize}
+    \item Velocity and acceleration data fro
+\end{itemize}
 
 \begin{Figure}
     \centering
@@ -143,8 +160,8 @@ As you can see in Figure \ref{fig:10pushgravelv}, derp.
             \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_rla.dat};
         \end{groupplot}
     \end{tikzpicture}
-    \captionof{figure}{Velocity and acceleration traces for both SmartWheel and Redliner for 10 pushes on rough gravel. Despite the rough terrain, the traces are in close agreement---allowing Redliner to reasonably estimate the velocity and distance travelled by the wheelchair while also detecting over-exertion events.}
-    \label{fig:10pushgravelv}
+    \captionof{figure}{Velocity and acceleration traces for both SmartWheel and Redliner for 10 pushes on rough gravel.}
+    \label{fig:10pushgravel}
 \end{Figure}
 
 \begin{Figure}
@@ -162,7 +179,7 @@ As you can see in Figure \ref{fig:10pushgravelv}, derp.
             \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_redline.dat}; \addlegendentry{\small\ Redline Events}
         \end{axis}
     \end{tikzpicture}
-    \captionof{figure}{Acceleration, detected pushes, and redlines of 10 pushes on gravel as measured by Redliner. An algorithm was developed to detect pushes from this acceleration data while also monitoring redlining events.}
+    \captionof{figure}{Acceleration, detected pushes, and redlines of 10 pushes on gravel as measured by Redliner.}
     \label{fig:10pushgravel_pushes}
 \end{Figure}
 
@@ -173,14 +190,14 @@ As you can see in Figure \ref{fig:10pushgravelv}, derp.
 \makeatother
 \centering
 \subfloat[Second Redliner prototype version using a custom PCB built for further testing.]{%
-  \includegraphics[width=0.4\linewidth]{photos/redliner_beta.png}%
+  \includegraphics[width=0.45\linewidth]{photos/redliner_beta.png}%
   \label{fig:redliner_photo:beta}%
 }\qquad%
-\subfloat[Android app developed to interact with the device over Bluetooth Low Energy and upload data to a cloud dashboard.]{%
-  \includegraphics[height=0.4\linewidth]{photos/app_screenshot.png}%
+\subfloat[Android app developed to interact with Redliner and upload data to a cloud dashboard.]{%
+  \makebox[0.45\linewidth][c]{\includegraphics[height=0.45\linewidth]{photos/app_screenshot.png}}%
   \label{fig:redliner:app}%
 }
-\caption{Simulation results}
+\caption{Ongoing commercial development of Redliner}
 \end{minipage}
 
 \section*{Conclusions}
@@ -190,12 +207,13 @@ As you can see in Figure \ref{fig:10pushgravelv}, derp.
     \item Redliner is moving forward as a commercial entity to produce and sell the devices
 \end{itemize}
 
-\nocite{*} % Print all references regardless of whether they were cited in the poster or not
-\bibliographystyle{plain} % Plain referencing style
-\bibliography{sources} % Use the example bibliography file sample.bib
+\small
+\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{sources}
 
 \section*{Acknowledgements}
-Funding for this work was provided for by the University of Alberta, Telus, the Government of Canada, and Redliner Inc.
+Funding for this work was provided for by the University of Alberta, Telus, Mitacs Accelerate Program, and Redliner Inc.
 
 \end{multicols*}
 \end{document}
