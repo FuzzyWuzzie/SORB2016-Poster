@@ -42,10 +42,15 @@
 \definecolor{tableau_red}{RGB}{214, 39, 40}
 \definecolor{tableau_green}{RGB}{44, 160, 44}
 
-\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
-\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
-\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
-\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\definecolor{tableau_blue_bg}{RGB}{174, 199, 232}
+\definecolor{tableau_red_bg}{RGB}{255, 152, 150}
+\definecolor{tableau_green_bg}{RGB}{152, 223, 138}
+\definecolor{tableau_orange_bg}{RGB}{255, 187, 120}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=tableau_red_bg]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=tableau_blue_bg]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=tableau_orange_bg]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=tableau_green_bg]
 \tikzstyle{arrow} = [thick,-{Latex[length=3mm, width=3mm]}]
 
 \begin{document}
