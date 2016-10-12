@@ -7,12 +7,13 @@
 \columnseprule=1pt
 
 \usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta}
 
 \usepackage{sectsty}
 \sectionfont{\huge\selectfont}
 
-\usepackage[scaled]{helvet}
 \renewcommand\familydefault{\sfdefault} 
+\usepackage[scaled]{helvet}
 \usepackage[T1]{fontenc}
 
 \usepackage{graphicx} % Required for including images
@@ -23,8 +24,8 @@
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
 
 \usepackage[hypcap=false]{caption}
-\captionsetup{margin=0.5cm,font=large,labelfont=bf}
-\captionsetup[subfloat]{margin=0.5cm,font=large,labelfont=bf}
+\captionsetup{margin=0.5cm,font=normalsize,labelfont=bf}
+\captionsetup[subfloat]{margin=0.5cm,font=normalsize,labelfont=bf}
 
 \newenvironment{Figure}
   {\par\medskip\noindent\minipage{\linewidth}}
@@ -45,7 +46,7 @@
 \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
 \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
 \tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
-\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{arrow} = [thick,-{Latex[length=3mm, width=3mm]}]
 
 \begin{document}
 
@@ -79,7 +80,7 @@
                 \item Manual wheelchair users are highly susceptible to repetitive stress injuries \cite{mercer06}
                 \item Repeated propulsion forces over 80\% of maximum capacity results in injuries \cite{hills11}
             \end{itemize}
-        \item Typical existing activity monitors (Fitbit\textsuperscript{\textregistered}, etc) \textbf{don't work} with manual wheelchair users
+        \item Typical existing activity monitors (Fitbit\textsuperscript{\textregistered}, etc.) \textbf{don't work} with manual wheelchair users
         \item SmartWheels are the gold standard \cite{asato93,cowan08}
             \begin{itemize}
                 \item Prohibitively expensive for users
@@ -209,9 +210,31 @@
 \end{itemize}
 
 \begin{Figure}
+    \small
     \centering
-    \begin{tikzpicture}[node distance=2cm]
+    \begin{tikzpicture}[node distance=4cm, every text node part/.style={align=center}]
         \node (start) [startstop] {Start};
+
+        \node (measure) [io, right of=start, xshift=2cm] {Measure $\alpha$};
+        \draw [arrow] (start) -- (measure);
+
+        \node (isaccelerating) [decision, right of=measure, xshift=2cm] {$\alpha \geq \alpha_{min}$};
+        \draw [arrow] (measure) -- (isaccelerating);
+
+        \node (ispushing) [decision, right of=isaccelerating, xshift=2cm] {pushing};
+        \draw [arrow] (isaccelerating) -- node[anchor=south] {no} (ispushing);
+
+        \node (pushing) [process, right of=ispushing, xshift=2cm] {pushing \\ not redlining};
+        \draw [arrow] (ispushing) -- node[anchor=south] {no} (pushing);
+
+        \node (isredlining) [decision, below of=ispushing, yshift=-1.5cm] {$a + d \geq a_{cap}$};
+        \draw [arrow] (ispushing) -- node[anchor=west] {yes} (isredlining);
+
+        \node (redlining) [process, right of=isredlining, xshift=2cm] {redlining};
+        \draw [arrow] (isredlining) -- node[anchor=south] {yes} (redlining);
+
+        \node (ispushing2) [decision, below of=isaccelerating, yshift=-1.5cm] {pushing};
+        \draw [arrow] (isaccelerating) -- node[anchor=west] {yes} (ispushing2);
     \end{tikzpicture}
     \captionof{figure}{Push detection algorithm}
     \label{fig:algorithm}
@@ -222,9 +245,9 @@
     \begin{tikzpicture}
         \begin{axis}[
             legend cell align=left,
-            width=0.8\linewidth,height=0.3\linewidth,
-            xmin=0, xmax=26, ymin=-1.5, ymax=2.0,
-            xtick={0,2,...,26}, ytick={-1.5,-1.0,...,2.0}, grid=both,
+            width=0.8\linewidth,height=0.25\linewidth,
+            xmin=0, xmax=26, ymin=-1, ymax=2.0,
+            xtick={0,2,...,26}, ytick={-1.0,-0.5,...,2.0}, grid=both,
             axis lines=left,
             xlabel={Time, $t$ (s)}, ylabel={Acceleration, $a$, $\frac{\mathrm{m}}{\mathrm{s}^2}$}]
             \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_rla.dat}; \addlegendentry{\small\ Acceleration}
@@ -236,7 +259,13 @@
     \label{fig:10pushgravel_pushes}
 \end{Figure}
 
-With these results, a commercial entity---Redliner Inc.---has been created to move the project forward, which has resulted in new prototypes and software being developed.
+\begin{itemize}
+    \item Redliner Inc. has been created to move the project forward
+    \begin{itemize}
+        \item New prototypes and software developed
+        \item More extensive testing
+    \end{itemize}
+\end{itemize}
 
 \noindent
 \begin{minipage}{\columnwidth}
@@ -245,11 +274,11 @@ With these results, a commercial entity---Redliner Inc.---has been created to mo
 \makeatother
 \centering
 \subfloat[Second Redliner prototype version using a custom PCB built for further testing.]{%
-  \includegraphics[width=0.45\linewidth]{photos/redliner_beta.png}%
+  \includegraphics[width=0.4\linewidth]{photos/redliner_beta.png}%
   \label{fig:redliner_photo:beta}%
 }\qquad%
 \subfloat[Android app developed to interact with Redliner and upload data to a cloud-based dashboard.]{%
-  \makebox[0.45\linewidth][c]{\includegraphics[height=0.45\linewidth]{photos/app_screenshot.png}}%
+  \makebox[0.4\linewidth][c]{\includegraphics[height=0.4\linewidth]{photos/app_screenshot.png}}%
   \label{fig:redliner:app}%
 }
 \caption{Ongoing commercial development of Redliner}
@@ -259,7 +288,7 @@ With these results, a commercial entity---Redliner Inc.---has been created to mo
 \begin{itemize}
     \item Redliner is a new activity monitor for manual wheelchair users
     \item Redliner has been validated against expensive SmartWheel devices
-    \item Redliner is moving forward as a commercial entity to produce and sell the devices
+    \item Redliner should be available as a commercial device soon
 \end{itemize}
 
 \small
@@ -268,7 +297,7 @@ With these results, a commercial entity---Redliner Inc.---has been created to mo
 \bibliography{sources}
 
 \section*{Acknowledgements}
-Funding for this work was provided for by the University of Alberta, Telus, Mitacs Accelerate Program, and Redliner Inc.
+Funding was provided for by the University of Alberta, Telus, Mitacs Accelerate Program, and Redliner Inc.
 
 \end{multicols*}
 \end{document}
