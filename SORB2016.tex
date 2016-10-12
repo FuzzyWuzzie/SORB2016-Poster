@@ -41,6 +41,12 @@
 \definecolor{tableau_red}{RGB}{214, 39, 40}
 \definecolor{tableau_green}{RGB}{44, 160, 44}
 
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
 \begin{document}
 
 \tikz[remember picture,overlay] \node[inner sep=0pt, anchor=north] at (current page.north){\includegraphics[width=\paperwidth,height=12cm]{GreenBackground.pdf}};
@@ -57,32 +63,32 @@
 \veryHuge \textbf{\textsc{Redliner: An Activity Monitor for Manual Wheelchair Users}}\\[1cm]
 \huge {Kenton Hamaluik, MSc, EIT\textsuperscript{1}, Zohreh Salimi, MSc\textsuperscript{2}, Martin Ferguson-Pell, PhD, C.Phys.\textsuperscript{3}}\\
 \large \textsuperscript{1}\href{mailto:hamaluik@ualberta.ca}{hamaluik@ualberta.ca}, \textsuperscript{2}\href{mailto:zsalimi@ualberta.ca}{zsalimi@ualberta.ca}, \textsuperscript{3}\href{mailto:martin.ferguson-pell@ualberta.ca}{martin.ferguson-pell@ualberta.ca}\\
-%\large \textsuperscript{1}Faculty of Rehabilitation Medicine, University of Alberta;\ \textsuperscript{2}Peter Lougheed Leadership College\\
+%\large \textsuperscript{1,2,3}Faculty of Rehabilitation Medicine, University of Alberta;\ \textsuperscript{3}Peter Lougheed Leadership College\\
 \end{minipage}
 
-\vspace{4cm}
+\vspace{3cm}
 
 \begin{multicols*}{3}
 \large
 
 \section*{Background}
-\begin{minipage}[t]{0.5\columnwidth}
+\begin{minipage}[t]{0.55\columnwidth}
     \begin{itemize}
         \item Wheelchair users have a need for daily activity monitoring
             \begin{itemize}
                 \item Manual wheelchair users are highly susceptible to repetitive stress injuries \cite{mercer06}
-                \item Propulsion forces over 80\% of maximum capacity often result in injuries \cite{hills11}
+                \item Repeated propulsion forces over 80\% of maximum capacity results in injuries \cite{hills11}
             \end{itemize}
         \item Typical existing activity monitors (Fitbit\textsuperscript{\textregistered}, etc) \textbf{don't work} with manual wheelchair users
         \item SmartWheels are the gold standard \cite{asato93,cowan08}
             \begin{itemize}
-                \item Prohibitively expensive for consumers
-                \item Require chair modification (replacing the wheels)
+                \item Prohibitively expensive for users
+                \item Require chair modification (swap wheels)
             \end{itemize}
     \end{itemize}
 \end{minipage}
 \hspace{0.05\columnwidth}%
-\begin{minipage}[t]{0.45\columnwidth}
+\begin{minipage}[t]{0.4\columnwidth}
     \begin{Figure}
         \centering
         \includegraphics[width=\linewidth]{photos/smartwheel.png}
@@ -99,10 +105,9 @@
         \item Average travel velocity
         \item Amount of time spent active
         \item Estimated distance travelled
-        \item Number of ``redline events''\textsuperscript{1}
+        \item Number of ``redline events'' (when propulsion force exceeds 80\% of maximum capacity)
     \end{itemize}
 \end{itemize}
-\textsuperscript{1} \textit{redline events} are instances of when the user's propulsion force exceeds 80\% of the maximal propulsion force they can generate, thus indicating potential for injury
 
 \section*{Method}
 \begin{minipage}[t]{0.45\columnwidth}
@@ -113,10 +118,10 @@
         \label{fig:redliner:alpha}
     \end{Figure}
 \end{minipage}
-\hspace{0.05\columnwidth}%
-\begin{minipage}[t]{0.5\columnwidth}
+%\hspace{0.05\columnwidth}%
+\begin{minipage}[t]{0.55\columnwidth}
     \begin{itemize}
-        \item Utilize Newton's laws of motion to estimate propulsion force using kinematic data
+        \item Utilize Newton's laws of motion to estimate propulsion force using kinematic data and Kalman filtering
         \item Create a simple prototype to perform the measurements for analysis
         \item Collect and compare synchronous propulsion data between SmartWheel and Redliner across varied terrain:
         \begin{itemize}
@@ -128,13 +133,40 @@
     \end{itemize}
 \end{minipage}
 
+\begin{itemize}
+    \item Velocity and acceleration are calculated using the following, where $\Delta a$ is the differential centripetal acceleration at two radial points on the wheel and $d$ is the distance between the points.
+\end{itemize}
+
+\begin{minipage}{0.5\columnwidth}
+    \begin{equation}
+        \omega = \sqrt{\frac{\Delta a}{d}}
+        \label{equ:velocity}
+    \end{equation}
+\end{minipage}
+%
+\begin{minipage}{0.5\columnwidth}
+    \begin{equation}
+        \alpha = \frac{\partial \omega}{\partial t}
+        \label{equ:acceleration}
+    \end{equation}
+\end{minipage}
+
 \section*{Results}
 \begin{itemize}
-    \item Velocity and acceleration data from both Redliner and SmartWheel were collected and compared
+    \item Velocity and acceleration data from both Redliner and SmartWheel were collected and compared (see Figure \ref{fig:10pushgravel} for a sample)
     \begin{itemize}
-        \item Sample results in Figure \ref{fig:10pushgravel}
-        \item Velocity traces have a Pearson-R coefficient of 0.985
-        \item Acceleration traces have a Pearson-R coefficient of 0.823
+        \item Both traces are highly correlated between Redliner and Smartwheel data
+        \item Redliner velocity data is accurate enough to adequately estimate:
+        \begin{itemize}
+            \item Distance travelled
+            \item Average velocity
+        \end{itemize}
+        \item Redliner acceleration data is accurate enough to adequately estimate:
+        \begin{itemize}
+            \item Time spent active
+            \item Number of pushes
+            \item Redline events
+        \end{itemize}
     \end{itemize}
 \end{itemize}
 
@@ -146,6 +178,7 @@
             vertical sep=2cm}
         ]
             \nextgroupplot[
+                legend cell align=left,
                 width=0.8\linewidth,height=0.3\linewidth,
                 xmin=0, xmax=26, ymin=-0.25, ymax=1.75,
                 xtick={0,2,...,26}, ytick={0,0.4,...,1.6}, grid=both,
@@ -154,6 +187,7 @@
             ]
             \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_swv.dat}; \addlegendentry{\small\ SmartWheel}
             \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_rlv.dat}; \addlegendentry{\small\ Redliner}
+            \node at (axis cs:0.4,1.7) [anchor=north west] [rectangle,draw,fill=white]{\small Pearson-R: 0.985};
             \nextgroupplot[
                 width=0.8\linewidth,height=0.3\linewidth,
                 xmin=0, xmax=26, ymin=-1.5, ymax=2.0,
@@ -163,10 +197,24 @@
             ]
             \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_swa.dat};
             \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_rla.dat};
+            \node at (axis cs:25.6,1.9) [anchor=north east] [rectangle,draw,fill=white]{\small Pearson-R: 0.823};
         \end{groupplot}
     \end{tikzpicture}
     \captionof{figure}{Velocity and acceleration traces for both SmartWheel and Redliner for 10 pushes on rough gravel.}
     \label{fig:10pushgravel}
+\end{Figure}
+
+\begin{itemize}
+    \item To detect pushes an algorithm was developed (Figure \ref{fig:algorithm}), with sample results shown in Figure \ref{fig:10pushgravel_pushes}.
+\end{itemize}
+
+\begin{Figure}
+    \centering
+    \begin{tikzpicture}[node distance=2cm]
+        \node (start) [startstop] {Start};
+    \end{tikzpicture}
+    \captionof{figure}{Push detection algorithm}
+    \label{fig:algorithm}
 \end{Figure}
 
 \begin{Figure}
@@ -188,6 +236,8 @@
     \label{fig:10pushgravel_pushes}
 \end{Figure}
 
+With these results, a commercial entity---Redliner Inc.---has been created to move the project forward, which has resulted in new prototypes and software being developed.
+
 \noindent
 \begin{minipage}{\columnwidth}
 \makeatletter
@@ -198,7 +248,7 @@
   \includegraphics[width=0.45\linewidth]{photos/redliner_beta.png}%
   \label{fig:redliner_photo:beta}%
 }\qquad%
-\subfloat[Android app developed to interact with Redliner and upload data to a cloud dashboard.]{%
+\subfloat[Android app developed to interact with Redliner and upload data to a cloud-based dashboard.]{%
   \makebox[0.45\linewidth][c]{\includegraphics[height=0.45\linewidth]{photos/app_screenshot.png}}%
   \label{fig:redliner:app}%
 }
