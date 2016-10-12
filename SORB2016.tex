@@ -218,11 +218,12 @@
     \begin{tikzpicture}[node distance=4cm, every text node part/.style={align=center}]
         \node (measure) [io] {$\alpha$};
         \node (isaccelerating) [decision, right of=measure, xshift=2cm] {$\alpha \geq \alpha_{active}$};
-        \node (setpushing) [process, right of=isaccelerating, xshift=2cm] {$P = 1$ \\ $t_0 = t$ \\ $R = 0$ \\ $\alpha_d = 0$};
+        \node (isnotpushing) [decision, right of=isaccelerating, xshift=2cm] {$P$};
+        \node (setpushing) [process, right of=isnotpushing, xshift=2cm] {$P = 1$ \\ $t_0 = t$ \\ $R = 0$ \\ $\alpha_d = 0$};
         \node (isredlining) [decision, right of=setpushing, xshift=2cm] {$\alpha + \alpha_d \geq \alpha_{cap}$ \\ $t - t_0 \geq t_{min}$};
         \node (setredlining) [process, right of=isredlining, xshift=3cm] {$R = 1$};
 
-        \node (ispushing) [decision, below of=setpushing, yshift=-2cm] {$P$};
+        \node (ispushing) [decision, below of=isnotpushing, yshift=-2cm] {$P$};
         \node (notpushing) [process, right of=ispushing, xshift=2cm] {$P = 0$};
         \node (islongenough) [decision, right of=notpushing, xshift=2cm] {$t_{push} \geq t_{min}$};
         \node (incrpushes) [process, right of=islongenough, xshift=3cm] {$p = p + 1$};
@@ -234,19 +235,22 @@
         \node (decelerating) [process, right of=isdecelerating, xshift=2cm] {$\alpha_d = \left|\alpha\right|$};
 
         \draw [arrow] (measure) -- (isaccelerating);
-        \draw [arrow] (isaccelerating) -- node[anchor=south] {no} (setpushing);
+        \draw [arrow] (isaccelerating) -- node[anchor=south] {yes} (isnotpushing);
+        \draw [arrow] (isnotpushing) -- node[anchor=south] {no} (setpushing);
+        \coordinate [below of=setpushing, xshift=2cm] (belowsetpushing);
+        \draw [arrow] (isnotpushing.south) |- node[anchor=south west] {yes} (belowsetpushing) |- (isredlining.west);
         \draw [arrow] (setpushing) -- (isredlining);
         \draw [arrow] (isredlining) -- node[anchor=south] {yes} (setredlining);
 
-        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {yes} (ispushing.west);
+        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {no} (ispushing.west);
         \draw [arrow] (ispushing) -- node[anchor=south] {yes} (notpushing);
         \draw [arrow] (notpushing) -- (islongenough);
         \draw [arrow] (islongenough) -- node[anchor=south] {yes} (incrpushes);
 
-        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {yes} (wasredlining.west);
+        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {no} (wasredlining.west);
         \draw [arrow] (wasredlining) -- node[anchor=south] {yes} (notredlining);
 
-        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {yes} (isdecelerating.west);
+        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {no} (isdecelerating.west);
         \draw [arrow] (isdecelerating) -- node[anchor=south] {yes} (decelerating);
     \end{tikzpicture}
     \captionof{figure}{Push detection algorithm}
