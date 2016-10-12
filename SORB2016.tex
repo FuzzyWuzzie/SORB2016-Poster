@@ -23,6 +23,7 @@
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
 
+\renewcommand{\figurename}{Fig.}
 \usepackage[hypcap=false]{caption}
 \captionsetup{margin=0.5cm,font=normalsize,labelfont=bf}
 \captionsetup[subfloat]{margin=0.5cm,font=normalsize,labelfont=bf}
@@ -47,9 +48,9 @@
 \definecolor{tableau_green_bg}{RGB}{152, 223, 138}
 \definecolor{tableau_orange_bg}{RGB}{255, 187, 120}
 
-\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=tableau_red_bg]
-\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=tableau_blue_bg]
-\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=tableau_orange_bg]
+%\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=tableau_red_bg]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=tableau_red_bg]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=tableau_blue_bg]
 \tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=tableau_green_bg]
 \tikzstyle{arrow} = [thick,-{Latex[length=3mm, width=3mm]}]
 
@@ -159,16 +160,13 @@
 
 \section*{Results}
 \begin{itemize}
-    \item Velocity and acceleration data from both Redliner and SmartWheel were collected and compared (see Figure \ref{fig:10pushgravel} for a sample)
+    \item Velocity and acceleration data from both Redliner and SmartWheel were collected and compared (see Fig. \ref{fig:10pushgravel} for a sample on rough gravel)
     \begin{itemize}
-        \item Both traces are highly correlated between Redliner and Smartwheel data
-        \item Redliner velocity data is accurate enough to adequately estimate:
+        \item Both velocity and acceleration are highly correlated between Redliner and Smartwheel
+        \item Redliner velocity and acceleration data is accurate enough to estimate:
         \begin{itemize}
             \item Distance travelled
             \item Average velocity
-        \end{itemize}
-        \item Redliner acceleration data is accurate enough to adequately estimate:
-        \begin{itemize}
             \item Time spent active
             \item Number of pushes
             \item Redline events
@@ -206,40 +204,50 @@
             \node at (axis cs:25.6,1.9) [anchor=north east] [rectangle,draw,fill=white]{\small Pearson-R: 0.823};
         \end{groupplot}
     \end{tikzpicture}
-    \captionof{figure}{Velocity and acceleration traces for both SmartWheel and Redliner for 10 pushes on rough gravel.}
+    \captionof{figure}{Velocity and acceleration of SmartWheel and Redliner for 10 pushes on rough gravel.}
     \label{fig:10pushgravel}
 \end{Figure}
 
 \begin{itemize}
-    \item To detect pushes an algorithm was developed (Figure \ref{fig:algorithm}), with sample results shown in Figure \ref{fig:10pushgravel_pushes}.
+    \item To detect pushes an algorithm was developed (Fig. \ref{fig:algorithm}), with results in Fig. \ref{fig:10pushgravel_pushes}.
 \end{itemize}
 
 \begin{Figure}
     \small
     \centering
     \begin{tikzpicture}[node distance=4cm, every text node part/.style={align=center}]
-        \node (start) [startstop] {Start};
+        \node (measure) [io] {$\alpha$};
+        \node (isaccelerating) [decision, right of=measure, xshift=2cm] {$\alpha \geq \alpha_{active}$};
+        \node (setpushing) [process, right of=isaccelerating, xshift=2cm] {$P = 1$ \\ $t_0 = t$ \\ $R = 0$ \\ $\alpha_d = 0$};
+        \node (isredlining) [decision, right of=setpushing, xshift=2cm] {$\alpha + \alpha_d \geq \alpha_{cap}$ \\ $t - t_0 \geq t_{min}$};
+        \node (setredlining) [process, right of=isredlining, xshift=3cm] {$R = 1$};
 
-        \node (measure) [io, right of=start, xshift=2cm] {Measure $\alpha$};
-        \draw [arrow] (start) -- (measure);
+        \node (ispushing) [decision, below of=setpushing, yshift=-2cm] {$P$};
+        \node (notpushing) [process, right of=ispushing, xshift=2cm] {$P = 0$};
+        \node (islongenough) [decision, right of=notpushing, xshift=2cm] {$t_{push} \geq t_{min}$};
+        \node (incrpushes) [process, right of=islongenough, xshift=3cm] {$p = p + 1$};
 
-        \node (isaccelerating) [decision, right of=measure, xshift=2cm] {$\alpha \geq \alpha_{min}$};
+        \node (wasredlining) [decision, below of=ispushing, yshift=-1cm] {$R$};
+        \node (notredlining) [process, right of=wasredlining, xshift=2cm] {$R = 0$ \\ $r = r + 1$};
+
+        \node (isdecelerating) [decision, below of=wasredlining, yshift=-1cm] {$\alpha < -\alpha_{active}$};
+        \node (decelerating) [process, right of=isdecelerating, xshift=2cm] {$\alpha_d = \left|\alpha\right|$};
+
         \draw [arrow] (measure) -- (isaccelerating);
+        \draw [arrow] (isaccelerating) -- node[anchor=south] {no} (setpushing);
+        \draw [arrow] (setpushing) -- (isredlining);
+        \draw [arrow] (isredlining) -- node[anchor=south] {yes} (setredlining);
 
-        \node (ispushing) [decision, right of=isaccelerating, xshift=2cm] {pushing};
-        \draw [arrow] (isaccelerating) -- node[anchor=south] {no} (ispushing);
+        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {yes} (ispushing.west);
+        \draw [arrow] (ispushing) -- node[anchor=south] {yes} (notpushing);
+        \draw [arrow] (notpushing) -- (islongenough);
+        \draw [arrow] (islongenough) -- node[anchor=south] {yes} (incrpushes);
 
-        \node (pushing) [process, right of=ispushing, xshift=2cm] {pushing \\ not redlining};
-        \draw [arrow] (ispushing) -- node[anchor=south] {no} (pushing);
+        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {yes} (wasredlining.west);
+        \draw [arrow] (wasredlining) -- node[anchor=south] {yes} (notredlining);
 
-        \node (isredlining) [decision, below of=ispushing, yshift=-1.5cm] {$a + d \geq a_{cap}$};
-        \draw [arrow] (ispushing) -- node[anchor=west] {yes} (isredlining);
-
-        \node (redlining) [process, right of=isredlining, xshift=2cm] {redlining};
-        \draw [arrow] (isredlining) -- node[anchor=south] {yes} (redlining);
-
-        \node (ispushing2) [decision, below of=isaccelerating, yshift=-1.5cm] {pushing};
-        \draw [arrow] (isaccelerating) -- node[anchor=west] {yes} (ispushing2);
+        \draw [arrow] (isaccelerating.south) |- node[anchor=south west] {yes} (isdecelerating.west);
+        \draw [arrow] (isdecelerating) -- node[anchor=south] {yes} (decelerating);
     \end{tikzpicture}
     \captionof{figure}{Push detection algorithm}
     \label{fig:algorithm}
@@ -292,8 +300,9 @@
 \section*{Conclusions}
 \begin{itemize}
     \item Redliner is a new activity monitor for manual wheelchair users
-    \item Redliner has been validated against expensive SmartWheel devices
-    \item Redliner should be available as a commercial device soon
+    \item Redliner has been validated against ``gold standard'' SmartWheels
+    \item Redliner is capable of monitoring activity and over-exertion
+    \item Redliner is being developed as a consumer device
 \end{itemize}
 
 \small
@@ -302,7 +311,7 @@
 \bibliography{sources}
 
 \section*{Acknowledgements}
-Funding was provided for by the University of Alberta, Telus, Mitacs Accelerate Program, and Redliner Inc.
+The authors thank the University of Alberta, Telus, Mitacs Accelerate Program, and Redliner Inc. for funding this work.
 
 \end{multicols*}
 \end{document}
