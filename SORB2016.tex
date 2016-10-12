@@ -145,17 +145,17 @@
 \end{itemize}
 
 \begin{minipage}{0.5\columnwidth}
-    \begin{equation}
+    \[%\begin{equation}
         \omega = \sqrt{\frac{\Delta a}{d}}
         \label{equ:velocity}
-    \end{equation}
+    \]%\end{equation}
 \end{minipage}
 %
 \begin{minipage}{0.5\columnwidth}
-    \begin{equation}
+    \[%\begin{equation}
         \alpha = \frac{\partial \omega}{\partial t}
         \label{equ:acceleration}
-    \end{equation}
+    \]%\end{equation}
 \end{minipage}
 
 \section*{Results}
@@ -187,7 +187,7 @@
                 xmin=0, xmax=26, ymin=-0.25, ymax=1.75,
                 xtick={0,2,...,26}, ytick={0,0.4,...,1.6}, grid=both,
                 axis lines=left,
-                ylabel={Velocity, $v$, $\frac{\mathrm{m}}{\mathrm{s}}$}
+                ylabel={Velocity, $v$, $\frac{\mathsf{m}}{\mathsf{s}}$}
             ]
             \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_swv.dat}; \addlegendentry{\small\ SmartWheel}
             \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_rlv.dat}; \addlegendentry{\small\ Redliner}
@@ -197,7 +197,7 @@
                 xmin=0, xmax=26, ymin=-1.5, ymax=2.0,
                 xtick={0,2,...,26}, ytick={-1.5,-1.0,...,2.0}, grid=both,
                 axis lines=left,
-                xlabel={Time, $t$ (s)}, ylabel={Acceleration, $a$, $\frac{\mathrm{m}}{\mathrm{s}^2}$}
+                xlabel={Time, $t$ (s)}, ylabel={Acceleration, $a$, $\frac{\mathsf{m}}{\mathsf{s}^2}$}
             ]
             \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_swa.dat};
             \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_rla.dat};
@@ -258,14 +258,15 @@
     \begin{tikzpicture}
         \begin{axis}[
             legend cell align=left,
-            width=0.8\linewidth,height=0.25\linewidth,
+            width=0.8\linewidth,height=0.3\linewidth,
             xmin=0, xmax=26, ymin=-1, ymax=2.0,
             xtick={0,2,...,26}, ytick={-1.0,-0.5,...,2.0}, grid=both,
             axis lines=left,
-            xlabel={Time, $t$ (s)}, ylabel={Acceleration, $a$, $\frac{\mathrm{m}}{\mathrm{s}^2}$}]
-            \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_rla.dat}; \addlegendentry{\small\ Acceleration}
-            \addplot +[mark=noindent, line width=4pt, tableau_green] table{data/assets/gravel_10_pushes.dat}; \addlegendentry{\small\ Detected Pushes}
-            \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_redline.dat}; \addlegendentry{\small\ Redline Events}
+            xlabel={Time, $t$ (s)}, ylabel={Acceleration, $a$, $\frac{\mathsf{m}}{\mathsf{s}^2}$}]
+            \addplot +[mark=noindent, line width=4pt, tableau_blue] table{data/assets/gravel_10_rla.dat}; \addlegendentry{\small Acceleration}
+            \addplot +[mark=noindent, line width=4pt, tableau_green] table{data/assets/gravel_10_pushes.dat}; \addlegendentry{\small Detected Pushes}
+            \addplot +[mark=noindent, line width=1pt, tableau_red, dashed] coordinates {(0,1.31907738888) (26,1.31907738888)}; \addlegendentry{\small Redline Threshold}
+            \addplot +[mark=noindent, line width=4pt, tableau_red] table{data/assets/gravel_10_redline.dat}; \addlegendentry{\small Redline Events}
         \end{axis}
     \end{tikzpicture}
     \captionof{figure}{Acceleration, detected pushes, and redlines of 10 pushes on gravel as measured by Redliner.}
